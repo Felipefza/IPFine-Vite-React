@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 
 function CalculatorList( { index, subnetName, hosts, description } ) {
@@ -35,11 +36,34 @@ function CircleIndex( { index } ) {
 }
 
 function FirstLine( { subnetName, hosts } ) {
+
+  const [subnetNameValue, setSubnetNameValue] = useState(subnetName)
+  const [hostsValue, setHostsValue] = useState(hosts)
+
+  function changeHosts(event) {
+    var value = event.target.value
+
+    var newValue = value.replace(/\D+/g, "")
+
+    if (newValue < 1) {
+      setHostsValue(1)
+      return
+    }
+
+    setHostsValue(newValue)
+  }
+
+  function changeSubnetName( event ) {
+    var value = event.target.value
+
+    setSubnetNameValue(value)
+  }
+
   return (
     <div className="first-line">
-      <input className="subnet-input" type="text" placeholder={ subnetName }/>
+      <input className="subnet-input" type="text" placeholder={ subnetName } value={ subnetNameValue } onChange={ changeSubnetName }/>
       <p className="requirements-text">Cantidad Hosts: </p>
-      <input className="number-hosts" type="text" placeholder="50" value={ hosts }/>
+      <input className="number-hosts" type="text" placeholder="50" value={ hostsValue } onChange={ changeHosts }/>
       <button className="delete-button" type="button">
         <img id="trash_icon" className="trash_icon"/>
       </button>
@@ -48,9 +72,18 @@ function FirstLine( { subnetName, hosts } ) {
 }
 
 function SecondLine( { description } ) {
+
+  const [descriptionValue, setDescriptionValue] = useState(description)
+
+  function changeDescription(event) {
+    var value = event.target.value
+
+    setDescriptionValue(value)
+  }
+
   return (
     <div className="second-line">
-      <input className="description" type="text" placeholder="Descripcion (opcional)" value={ description }/>
+      <input className="description" type="text" placeholder="Descripcion (opcional)" value={ descriptionValue } onChange={ changeDescription }/>
     </div>
   );
 }

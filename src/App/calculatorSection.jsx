@@ -58,11 +58,24 @@ function CalculatorSection() {
 export default CalculatorSection
 
 function InputNetwork() {
+
+  // const regexValue = /(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}/
+
+  const [networkAddress, setNetworkAddress] = useState("192.168.1.0")
+
+  function changeNetworkAddress( event ) {
+    var value = event.target.value
+
+    var newValue = value.replace(/[a-z]/gi, "")
+
+    setNetworkAddress(newValue)
+  }
+
   return (
       <div>
         <label htmlFor="network-address">Dirección de red</label>
         <br/>
-        <input id="network-address" className="input-box" type="text" value="192.168.1.0" placeholder="192.168.1.0"/>
+        <input id="network-address" className="input-box" type="text" value={networkAddress} placeholder="192.168.1.0" onChange={changeNetworkAddress}/>
         <br/>
         <label id="network-address-error" htmlFor="network-address"></label>
       </div>
@@ -72,17 +85,21 @@ function InputNetwork() {
 function InputCIDR() {
   const [cird, setCird] = useState(24)
 
-  function changeCIDR(event) {
+  function changeCIDR( event ) {
     var value = event.target.value
 
-    value = value.replace(/[a-z]/i, "")
+    var newValue = value.replace(/\D+/g, "")
 
-    if (value > 0 && value < 33) {
-      setCird(value)
-
-    } else {
-      setCird(24)
+    if (newValue < 1) {
+      setCird(1)
+      return
     }
+    else if (newValue > 32) {
+      setCird(32)
+      return
+    }
+
+    setCird(newValue)
   }
 
   return (
